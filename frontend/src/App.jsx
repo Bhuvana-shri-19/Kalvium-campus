@@ -20,6 +20,7 @@ export default function App() {
           <Route path="/architecture" element={<ArchitectureSimulator />} />
           <Route path="/workflow" element={<WorkflowValidator />} />
           <Route path="/history" element={<RequestHistory />} />
+          <Route path="/requests" element={<RequestHistory />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

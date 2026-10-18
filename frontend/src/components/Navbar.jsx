@@ -12,7 +12,8 @@ const ROUTE_CONTEXT_MAP = {
   '/navigator': { title: 'Campus Navigator', badge: 'DAA' },
   '/architecture': { title: 'Computer Architecture', badge: 'COA' },
   '/workflow': { title: 'Request Workflow', badge: 'FLAT' },
-  '/history': { title: 'Request History', badge: null }
+  '/history': { title: 'Request History', badge: null },
+  '/requests': { title: 'Request History', badge: null }
 };
 
 /**

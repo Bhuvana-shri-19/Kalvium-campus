@@ -41,7 +41,7 @@ export default function Dashboard() {
               disabled={loading}
               title="Refresh request telemetry from backend"
             >
-              {loading ? 'Refreshing...' : '&#8635; Refresh Telemetry'}
+              {loading ? 'Refreshing...' : '↺ Refresh Telemetry'}
             </button>
             <StatusBadge status="online" label="Engine Active" />
           </div>
