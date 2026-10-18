@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+*/node_modules/
+.pnp
+.pnp.js
+
+# Production builds and caches
+dist/
+*/dist/
+build/
+*/build/
+.cache/
+*/.cache/
+.vite/
+*/.vite/
+
+# Local Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+!**/.env.example
+*.pem
+*.key
+*.cert
+
+# Logs & temporary files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+*.log
+.temp/
+.tmp/
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

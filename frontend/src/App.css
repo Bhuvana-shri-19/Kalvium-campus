@@ -1,0 +1,6 @@
+/* Application-level custom styles */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

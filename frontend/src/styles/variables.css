@@ -1,0 +1,172 @@
+/**
+ * Kalvium Campus Navigator & Request Processing Simulator
+ * Design System Tokens & Custom CSS Properties
+ *
+ * Theme: Clean Academic Technology (Light Theme)
+ * Palette: Pure Slate / Light Navy Text (#0f172a) with Blue Accents (#1e40af, #2563eb)
+ */
+
+:root {
+  /* ==========================================================================
+     1. COLOR PALETTE
+     ========================================================================== */
+
+  /* Canvas & Surface Backgrounds */
+  --bg-primary: #f8fafc;        /* App canvas background */
+  --bg-surface: #ffffff;        /* Cards, panels, modals */
+  --bg-subtle: #f1f5f9;         /* Table headers, hover states, secondary chips */
+  --bg-muted: #e2e8f0;          /* Subtle divider and backdrop tint */
+  --bg-overlay: rgba(15, 23, 42, 0.45); /* Modal / drawer backdrop */
+
+  /* Navy Text Hierarchy */
+  --text-main: #0f172a;         /* High-contrast dark navy for headings & primary text */
+  --text-muted: #475569;        /* Slate navy for descriptions & secondary labels */
+  --text-light: #94a3b8;        /* Light slate for disabled text, timestamps, placeholders */
+  --text-inverse: #ffffff;      /* Inverted white text for dark badges and primary buttons */
+
+  /* Primary Blue Accents (Academic Brand) */
+  --color-primary: #1e40af;       /* Kalvium deep blue for primary actions & active states */
+  --color-primary-hover: #1d4ed8; /* Primary button hover state */
+  --color-primary-active: #1e3a8a;/* Primary button active/pressed state */
+  --color-primary-light: #eff6ff; /* Primary light tint for active list items & selection */
+  --color-primary-border: #bfdbfe;/* Subtle border for primary light callouts */
+
+  /* Secondary Accent */
+  --color-accent: #2563eb;        /* Vibrant blue for links & secondary highlights */
+  --color-accent-hover: #1d4ed8;  /* Accent hover */
+  --color-accent-light: #dbeafe;  /* Accent light tint */
+
+  /* Semantic Status Colors (State Feedback & Badges) */
+  --color-success: #059669;       /* Verified, Approved, L(M) Accepted */
+  --color-success-hover: #047857;
+  --color-success-bg: #ecfdf5;
+  --color-success-border: #a7f3d0;
+
+  --color-warning: #d97706;       /* Pending review, In-progress, In Review */
+  --color-warning-hover: #b45309;
+  --color-warning-bg: #fffbeb;
+  --color-warning-border: #fde68a;
+
+  --color-danger: #dc2626;        /* Rejected, Trap State, Error */
+  --color-danger-hover: #b91c1c;
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fecaca;
+
+  --color-info: #0284c7;          /* Informational notices, Bus signals */
+  --color-info-hover: #0369a1;
+  --color-info-bg: #f0f9ff;
+  --color-info-border: #bae6fd;
+
+  /* Academic Discipline Modules */
+  --color-daa: #2563eb;           /* DAA (Algorithms) blue */
+  --color-daa-bg: #eff6ff;
+  --color-daa-border: #bfdbfe;
+
+  --color-coa: #7c3aed;           /* COA (Hardware Architecture) purple */
+  --color-coa-bg: #f5f3ff;
+  --color-coa-border: #ddd6fe;
+
+  --color-flat: #059669;          /* FLAT (Automata Theory) emerald */
+  --color-flat-bg: #ecfdf5;
+  --color-flat-border: #a7f3d0;
+
+  /* ==========================================================================
+     2. TYPOGRAPHY
+     ========================================================================== */
+
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  --font-family: var(--font-family-sans);
+
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;     /* 12px - Badges, tiny captions, status dots */
+  --font-size-sm: 0.825rem;    /* 13.2px - Helper text, table headers */
+  --font-size-base: 0.875rem;  /* 14px - Body text, standard inputs, table cells */
+  --font-size-md: 1rem;        /* 16px - Card titles, standard text */
+  --font-size-lg: 1.125rem;    /* 18px - Section headers */
+  --font-size-xl: 1.25rem;     /* 20px - Feature headings, modal titles */
+  --font-size-2xl: 1.5rem;     /* 24px - Metric stat values */
+  --font-size-3xl: 1.75rem;    /* 28px - Page headers */
+  --font-size-4xl: 2.25rem;    /* 36px - Hero banners, 404 display */
+
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.35;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  /* ==========================================================================
+     3. SPACING SCALE
+     ========================================================================== */
+
+  --spacing-2xs: 0.125rem;  /* 2px */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 0.75rem;    /* 12px */
+  --spacing-base: 1rem;     /* 16px */
+  --spacing-lg: 1.25rem;    /* 20px */
+  --spacing-xl: 1.5rem;     /* 24px */
+  --spacing-2xl: 2rem;      /* 32px */
+  --spacing-3xl: 3rem;      /* 48px */
+
+  /* ==========================================================================
+     4. BORDERS & STROKES
+     ========================================================================== */
+
+  --border-color: #e2e8f0;         /* Default card & table border */
+  --border-color-subtle: #f1f5f9;  /* Muted separators */
+  --border-color-dark: #cbd5e1;    /* Input hover & selected border */
+  --border-focus: #3b82f6;         /* Focus rings and active inputs */
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+
+  /* ==========================================================================
+     5. BORDER RADII
+     ========================================================================== */
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;                /* Badges, tags, code snippets */
+  --radius-md: 8px;                /* Buttons, form inputs, list items */
+  --radius-lg: 12px;               /* Cards, modals, containers */
+  --radius-xl: 16px;               /* Large hero panels */
+  --radius-full: 9999px;           /* Pills, status circles */
+
+  /* ==========================================================================
+     6. ELEVATION & SHADOWS
+     ========================================================================== */
+
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+  /* ==========================================================================
+     7. SIDEBAR, NAVBAR & LAYOUT DIMENSIONS
+     ========================================================================== */
+
+  --sidebar-width: 260px;          /* Desktop fixed sidebar width */
+  --sidebar-width-collapsed: 72px; /* Responsive collapsed sidebar */
+  --navbar-height: 60px;           /* Fixed top navbar height */
+  --content-max-width: 1200px;     /* Maximum readable container width */
+
+  /* Transitions */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.25s ease-in-out;
+  --transition-slow: 0.35s ease-in-out;
+
+  /* Z-Index Hierarchy */
+  --z-base: 1;
+  --z-dropdown: 80;
+  --z-navbar: 90;
+  --z-sidebar: 100;
+  --z-modal-backdrop: 999;
+  --z-modal: 1000;
+}
