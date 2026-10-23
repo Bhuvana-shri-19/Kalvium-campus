@@ -30,10 +30,19 @@ export default function Dashboard() {
     <div className="page-container">
       {/* Welcome Heading & Live Status */}
       <PageHeader
-        title="Welcome to Campus Simulation Dashboard"
+        title="Campus Simulation Dashboard"
         description="Unified telemetry, live request audit traces, and interdisciplinary educational engine status across DAA, COA, and FLAT."
         action={
-          <div className="dashboard-actions-bar">
+          <div className="dashboard-actions-bar" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <Link to="/workflow" className="btn btn-primary">
+              + Create &amp; Process Request
+            </Link>
+            <Link to="/request-history" className="btn btn-secondary">
+              View Request History
+            </Link>
+            <Link to="/guide" className="btn btn-secondary">
+              Project Guide
+            </Link>
             <button
               type="button"
               className="btn btn-secondary"
@@ -41,12 +50,34 @@ export default function Dashboard() {
               disabled={loading}
               title="Refresh request telemetry from backend"
             >
-              {loading ? 'Refreshing...' : '↺ Refresh Telemetry'}
+              {loading ? '...' : '↺ Refresh'}
             </button>
             <StatusBadge status="online" label="Engine Active" />
           </div>
         }
       />
+
+      {/* Project Introduction Banner */}
+      <div className="card" style={{ padding: '1.25rem 1.5rem', background: 'linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%)', border: '1px solid #bfdbfe' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1', minWidth: '280px' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e40af', marginBottom: '0.35rem' }}>
+              Educational Full-Stack Computer Science Simulator
+            </h3>
+            <p style={{ fontSize: '0.85rem', color: '#334155', lineHeight: '1.5', margin: 0 }}>
+              This application demonstrates how a single student request traverses three foundational computer science layers:
+              routing across physical campus landmarks using <strong>DAA Graph Algorithms (BFS/DFS)</strong>,
+              executing across digital hardware units using a <strong>COA Tri-Bus Pipeline</strong>, and
+              validating through academic administrative states using a <strong>FLAT Deterministic Finite Automaton (DFA)</strong>.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <span className="academic-badge badge-daa">DAA</span>
+            <span className="academic-badge badge-coa">COA</span>
+            <span className="academic-badge badge-flat">FLAT</span>
+          </div>
+        </div>
+      </div>
 
       {/* Real Metrics Summary Row */}
       <div className="card-grid" aria-label="Real Request Telemetry">
@@ -217,8 +248,8 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <Link to="/history" className="btn btn-secondary">
-            View All in Request History &rarr;
+          <Link to="/request-history" className="btn btn-secondary">
+            View Request History &rarr;
           </Link>
         </div>
 
@@ -252,13 +283,16 @@ export default function Dashboard() {
                   <th>Current State</th>
                   <th>Status</th>
                   <th>Submitted At</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {recentRequests.map((req) => (
                   <tr key={req.id}>
                     <td>
-                      <span className="request-id-link">{req.id}</span>
+                      <Link to={`/workflow?id=${req.id}`} className="request-id-link" title="Open in FLAT Workflow">
+                        {req.id}
+                      </Link>
                     </td>
                     <td>
                       <div style={{ fontWeight: '600' }}>{safeDisplay(req.studentName)}</div>
@@ -283,6 +317,13 @@ export default function Dashboard() {
                     </td>
                     <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                       {formatTimestamp(req.submittedAt)}
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                        <Link to={`/workflow?id=${req.id}`} className="btn-table-action" style={{ color: 'var(--color-primary)' }}>
+                          Workflow &rarr;
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -11,9 +11,15 @@ const ROUTE_CONTEXT_MAP = {
   '/dashboard': { title: 'Dashboard', badge: null },
   '/navigator': { title: 'Campus Navigator', badge: 'DAA' },
   '/architecture': { title: 'Computer Architecture', badge: 'COA' },
-  '/workflow': { title: 'Request Workflow', badge: 'FLAT' },
+  '/workflow': { title: 'FLAT Request Workflow', badge: 'FLAT' },
+  '/request-workflow': { title: 'FLAT Request Workflow', badge: 'FLAT' },
+  '/flat': { title: 'FLAT Request Workflow', badge: 'FLAT' },
+  '/request-history': { title: 'Request History', badge: null },
   '/history': { title: 'Request History', badge: null },
-  '/requests': { title: 'Request History', badge: null }
+  '/requests': { title: 'Request History', badge: null },
+  '/guide': { title: 'Project Guide', badge: 'DOCS' },
+  '/how-it-works': { title: 'Project Guide', badge: 'DOCS' },
+  '/project-guide': { title: 'Project Guide', badge: 'DOCS' }
 };
 
 /**

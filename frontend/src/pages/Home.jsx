@@ -40,7 +40,7 @@ export default function Home() {
             <span>Open Dashboard</span>
             <span aria-hidden="true">&rarr;</span>
           </Link>
-          <Link to="/history" className="btn btn-secondary">
+          <Link to="/request-history" className="btn btn-secondary">
             View Request History
           </Link>
         </div>

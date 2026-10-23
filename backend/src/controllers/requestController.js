@@ -79,6 +79,10 @@ export function createRequest(req, res, next) {
 
     const now = new Date().toISOString();
 
+    const priority = payload.priority !== undefined && payload.priority !== null
+      ? (typeof payload.priority === 'string' ? payload.priority.trim().toUpperCase() : payload.priority)
+      : 'MEDIUM';
+
     // Mandatory rule: Requests are ALWAYS initialized strictly in CREATED state.
     // Client-supplied currentState or status are deliberately disregarded.
     const newRecord = createRequestStore({
@@ -87,6 +91,7 @@ export function createRequest(req, res, next) {
       department,
       requestType,
       description,
+      priority,
       studentName,
       studentId,
       currentState: 'CREATED',

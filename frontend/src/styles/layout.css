@@ -45,6 +45,7 @@
   height: 100vh;
   z-index: var(--z-sidebar);
   transition: transform var(--transition-normal);
+  box-shadow: 1px 0 4px rgba(15, 23, 42, 0.03);
 }
 
 .sidebar-header {
@@ -69,14 +70,15 @@
 }
 
 .brand-badge {
-  background-color: var(--color-primary);
+  background: var(--gradient-primary);
   color: var(--text-inverse);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xs);
-  padding: 0.25rem 0.55rem;
+  padding: 0.28rem 0.6rem;
   border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
   line-height: 1;
+  box-shadow: 0 2px 5px rgba(30, 64, 175, 0.25);
 }
 
 .brand-name {
@@ -155,9 +157,12 @@
 }
 
 .sidebar-link.active {
-  background-color: var(--color-primary-light);
+  background: linear-gradient(90deg, #eff6ff 0%, #f8faff 100%);
   color: var(--color-primary);
   font-weight: var(--font-weight-semibold);
+  border-left: 3px solid var(--color-primary);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);
 }
 
 .sidebar-link.active .academic-badge {
@@ -181,8 +186,10 @@
 
 .top-navbar {
   height: var(--navbar-height);
-  background-color: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
   padding: 0 var(--spacing-xl);
   display: flex;
   align-items: center;
@@ -190,7 +197,7 @@
   position: sticky;
   top: 0;
   z-index: var(--z-navbar);
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
 }
 
 .top-navbar-left {

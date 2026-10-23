@@ -13,6 +13,10 @@ build/
 */.cache/
 .vite/
 */.vite/
+backend/bin/
+bin/
+*/bin/
+*.exe
 
 # Local Environment Variables & Secrets
 .env

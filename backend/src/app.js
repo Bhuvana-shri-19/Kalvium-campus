@@ -15,6 +15,9 @@
 
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { config } from './config/env.js';
 import navigationRoutes from './routes/navigationRoutes.js';
 import processingRoutes from './routes/processingRoutes.js';
@@ -22,6 +25,9 @@ import requestRoutes from './routes/requestRoutes.js';
 import workflowRoutes from './routes/workflowRoutes.js';
 import architectureRoutes from './routes/architectureRoutes.js';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -73,7 +79,19 @@ app.use('/api/requests', requestRoutes);
 app.use('/api/workflow', workflowRoutes);
 app.use('/api/architecture', architectureRoutes);
 
-// 5. JSON 404 Handler for undefined routes
+// 5. Serve Frontend Static Assets in Production / Monolith Deployment
+const frontendDist = path.resolve(__dirname, '../../frontend/dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
+// 6. JSON 404 Handler for undefined API routes
 app.use(notFoundHandler);
 
 // 6. Centralized Error-Handling Middleware mounted last

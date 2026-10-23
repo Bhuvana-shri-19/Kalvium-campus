@@ -111,6 +111,7 @@ export const navigationService = {
 
     return {
       algorithm: 'Breadth-First Search (BFS)',
+      engine: bfsResult.engine || 'Native C++ Binary (MinGW-w64 x86_64)',
       academicFocus: 'DAA: Level-order traversal & unweighted shortest path guarantees',
       startNode: startNorm,
       targetNode: targetNorm,
@@ -172,6 +173,7 @@ export const navigationService = {
 
     return {
       algorithm: 'Depth-First Search (DFS)',
+      engine: dfsResult.engine || 'Native C++ Binary (MinGW-w64 x86_64)',
       academicFocus: 'DAA: Deep recursive exploration, backtracking, and spanning tree discovery',
       startNode: startNorm,
       targetNode: targetNorm,

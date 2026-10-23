@@ -1,6 +1,7 @@
 /**
  * Depth-First Search (DFS) Algorithm for Adjacency-List Graphs
  * Discipline: Design & Analysis of Algorithms (DAA)
+ * Implementation: Native C++ Engine (dfs.exe / dfs)
  * 
  * ==============================================================================
  * THEORETICAL ANALYSIS & COMPLEXITY:
@@ -29,17 +30,21 @@
  *   for topological exploration, connectivity testing, and reachable subgraph analysis.
  * ==============================================================================
  * 
- * Pure algorithmic implementation free of Express, HTTP, or framework dependencies.
+ * Authoritative algorithm execution is performed by the compiled native C++ binary
+ * (backend/bin/dfs.exe) via safe standard input/output IPC without shell invocation.
  */
 
+import { runDFS } from './cppRunner.js';
+
 /**
- * Executes Depth-First Search (DFS) starting from a validated origin node.
+ * Executes Depth-First Search (DFS) starting from a validated origin node via compiled C++ binary.
  * Traversal follows the exact order of neighbors in the adjacency list deterministically.
  * 
  * @param {Object} graph - Adjacency list mapping each node ID to an array of neighbor IDs
  * @param {string} start - Unique identifier of the starting landmark
- * @param {string} [destination=null] - Optional destination node to halt traversal upon discovery
+ * @param {string|null} [destination=null] - Optional destination node to halt traversal upon discovery
  * @returns {Object} Result object containing:
+ *   - engine: string describing the native C++ engine
  *   - start: string identifier of the starting node
  *   - destination: string identifier or null
  *   - destinationFound: boolean or null if no destination provided
@@ -51,82 +56,7 @@
  * @throws {Error} If graph is invalid or start node does not exist in graph
  */
 export function dfs(graph, start, destination = null) {
-  // Input validation: Graph structure
-  if (!graph || typeof graph !== 'object' || Array.isArray(graph)) {
-    throw new Error('Invalid graph: Expected an adjacency list object.');
-  }
-
-  // Input validation: Start node
-  if (!start || typeof start !== 'string') {
-    throw new Error(`Invalid start location: "${start}". Must be a valid non-empty string.`);
-  }
-
-  // Validate start node exists in graph
-  if (!Object.prototype.hasOwnProperty.call(graph, start)) {
-    throw new Error(`Start location "${start}" does not exist in the graph.`);
-  }
-
-  // Validate optional destination node if provided
-  if (destination && !Object.prototype.hasOwnProperty.call(graph, destination)) {
-    throw new Error(`Destination location "${destination}" does not exist in the graph.`);
-  }
-
-  const visited = new Set();
-  const traversalOrder = [];
-  const treeEdges = [];
-  let destinationFound = false;
-
-  /**
-   * Deterministic recursive DFS traversal
-   * Visits neighbors in the exact order they appear in the graph adjacency array.
-   */
-  function traverse(current, parent = null) {
-    if (destination && destinationFound) return;
-
-    visited.add(current);
-    traversalOrder.push(current);
-
-    if (parent) {
-      treeEdges.push({ from: parent, to: current });
-    }
-
-    if (destination && current === destination) {
-      destinationFound = true;
-      return;
-    }
-
-    const neighbors = graph[current] || [];
-    for (const rawNeighbor of neighbors) {
-      // Support string neighbor IDs or object nodes with .node property
-      const neighbor = typeof rawNeighbor === 'string'
-        ? rawNeighbor
-        : (rawNeighbor && typeof rawNeighbor === 'object' ? rawNeighbor.node : null);
-
-      if (!neighbor) continue;
-
-      if (!visited.has(neighbor)) {
-        traverse(neighbor, current);
-        if (destination && destinationFound) return;
-      }
-    }
-  }
-
-  traverse(start, null);
-
-  return {
-    start,
-    destination: destination || null,
-    destinationFound: destination ? destinationFound : null,
-    traversalOrder,
-    visitedNodes: Array.from(visited),
-    visitedCount: visited.size,
-    treeEdges,
-    message: destination
-      ? (destinationFound
-          ? `DFS explored ${visited.size} nodes and reached target "${destination}". Note: DFS does not guarantee the shortest path.`
-          : `DFS explored all ${visited.size} reachable nodes from "${start}", but target "${destination}" was unreachable.`)
-      : `DFS explored all ${visited.size} reachable nodes from "${start}".`
-  };
+  return runDFS(graph, start, destination);
 }
 
 export const executeDFS = dfs;

@@ -15,16 +15,24 @@ An integrated full-stack educational web application unifying three foundational
   - [1. DAA: Graph Algorithms & Navigation](#1-daa-graph-algorithms--navigation)
   - [2. COA: Functional Units & System Bus Simulation](#2-coa-functional-units--system-bus-simulation)
   - [3. FLAT: Deterministic Finite Automaton Workflow](#3-flat-deterministic-finite-automaton-workflow)
+  - [4. Guided 5-Step Request Lifecycle](#4-guided-5-step-request-lifecycle)
+  - [5. Request History & Audit Telemetry](#5-request-history--audit-telemetry)
+  - [6. In-App Project Guide & Viva Script](#6-in-app-project-guide--viva-script)
 - [Campus Topological Graph](#campus-topological-graph)
 - [Technology Stack](#technology-stack)
 - [Project Directory Structure](#project-directory-structure)
 - [Prerequisites](#prerequisites)
 - [Installation & Environment Setup](#installation--environment-setup)
 - [Running the Application](#running-the-application)
+- [Native C++ DAA Algorithms (BFS & DFS)](#native-c-daa-algorithms-bfs--dfs)
+- [Production Deployment Guide](#production-deployment-guide)
+  - [Option 1: Docker Container Deployment](#option-1-docker-container-deployment-recommended)
+  - [Option 2: Cloud Platform Monolith (Render / Railway)](#option-2-cloud-platform-monolith-render--railway--flyio)
+  - [Option 3: Split Cloud Deployment (Vercel + Render)](#option-3-split-cloud-deployment-vercel--render)
 - [Backend REST API Reference](#backend-rest-api-reference)
 - [Sample Test Cases & Verified Outputs](#sample-test-cases--verified-outputs)
 - [Limitations of In-Memory Storage](#limitations-of-in-memory-storage)
-- [User Interface Screenshots](#user-interface-screenshots)
+- [Presentation Guide & Viva Voce Reference](#presentation-guide--viva-voce-reference)
 
 ---
 
@@ -114,6 +122,35 @@ $$M = (Q, \Sigma, \delta, q_0, F)$$
 
 #### Strict Determinism Rule
 Any transition symbol not defined in $\delta(q, \sigma)$ (such as attempting `COMPLETE` from `CREATED`) is **strictly rejected with HTTP 400**. The request's state in the store remains strictly unchanged. The server **never** trusts client-supplied states; it always evaluates transitions against the record's true state loaded from memory.
+
+### 4. Guided 5-Step Request Lifecycle
+
+The application features a guided 5-step wizard (`WorkflowValidator.jsx`) designed for first-time users:
+
+1. **Step 1: Create Request**: Form with input validation, auto-generated request ID preview, and initialisation in state $q_0 = \text{CREATED}$.
+2. **Step 2: Validate Request**: Explains prerequisite vetting. Only `VALIDATE` (advances to `VALIDATED`) or `REJECT` (trap state) are enabled.
+3. **Step 3: Process Request**: Explains departmental queue scheduling. Enabled once in `VALIDATED`.
+4. **Step 4: Complete or Reject**: Concludes in accepting state `COMPLETED` (green accepting badge) or trap state `REJECTED` (with optional administrative resubmission).
+5. **Step 5: View History**: Full chronological audit log of actions, timestamps, and state transitions, with a direct link to the Request History page.
+
+### 5. Request History & Audit Telemetry
+
+The **Request History** page (`RequestHistory.jsx`) provides a centralized telemetry dashboard for tracking all campus submissions:
+- **Dynamic Summary Cards**: Real-time counts for Total, Pending/In Review, Approved/Accepting, and Rejected requests.
+- **Search & Filters**: Search by Request ID, title, or requester; filter by approval status and DFA processing state.
+- **Sorting**: Multi-mode date sorting (newest first by default).
+- **View Details Modal**: Complete request view including requester ID, department, timestamps, credit metrics, and full transition history.
+
+### 6. In-App Project Guide & Viva Script
+
+The **Project Guide** page (`ProjectGuide.jsx` accessible at `/guide`) includes 7 interactive tabs answering all essential viva voce questions:
+- Theoretical overview and full-stack architecture
+- Module input/output specifications
+- BFS vs. DFS complexity and graph algorithms
+- 4-stage von Neumann pipeline and tri-bus architecture
+- 5-tuple DFA formal grammar
+- In-memory data store semantics
+- A timed 3-minute viva presentation script
 
 ---
 
@@ -333,11 +370,80 @@ npm run dev:frontend
 # Starts Vite local development server on port 5173
 ```
 
-### Option C: Production Frontend Build
+### Option C: Unified Production Server
 ```bash
 npm run build
-# Compiles Vite production bundle into frontend/dist/
+# Compiles native C++ binaries (backend/bin/) and Vite frontend bundle (frontend/dist/)
+
+node backend/server.js
+# Serves both the React frontend SPA and Express REST APIs on http://localhost:5000
 ```
+
+---
+
+## Native C++ DAA Algorithms (BFS & DFS)
+
+The Design & Analysis of Algorithms module executes authoritative graph traversals using high-performance, statically compiled native C++ executables:
+
+- **Source Files**:
+  - `backend/src/algorithms/cpp/bfs.cpp`: Breadth-First Search using `std::queue<std::string>`, `std::set<std::string>`, and `std::map<std::string, std::string>` parent tracking for optimal shortest paths.
+  - `backend/src/algorithms/cpp/dfs.cpp`: Depth-First Search with recursive cycle avoidance and spanning tree edge discovery (`treeEdges`).
+  - `backend/src/algorithms/cpp/graph_common.hpp`: Common graph data structures (6 landmarks, 9 edges), JSON parser, and stream handling.
+- **Node.js Integration (`backend/src/algorithms/cppRunner.js`)**:
+  - Node.js invokes `backend/bin/bfs.exe` / `backend/bin/dfs.exe` directly via `child_process.spawnSync`.
+  - JSON payload is piped via `stdin`, and JSON response is parsed from `stdout`.
+  - Enforces a strict 5000ms timeout and safe argument handling without shell concatenation (immune to command injection).
+- **Compilation Command**:
+  ```bash
+  npm run build:cpp
+  ```
+
+---
+
+## Production Deployment Guide
+
+The application is structured for turnkey deployment across various hosting environments.
+
+### Option 1: Docker Container Deployment (Recommended)
+A production-ready multi-stage `Dockerfile` is provided in the repository root that includes Node.js and the `g++` compiler.
+
+```bash
+# Build the container image
+docker build -t kalvium-campus-simulator .
+
+# Run the container on port 5000
+docker run -p 5000:5000 kalvium-campus-simulator
+```
+Visit `http://localhost:5000` to access the full-stack application.
+
+### Option 2: Cloud Platform Monolith (Render / Railway / Fly.io)
+Deploy the repository as a single Web Service. Express automatically serves the pre-built React frontend from `frontend/dist` and handles all `/api/*` REST routes on the same port.
+
+- **Build Command**:
+  ```bash
+  npm run install:all && npm run build
+  ```
+- **Start Command**:
+  ```bash
+  node backend/server.js
+  ```
+- **Environment Variables**:
+  - `PORT`: Automatically provided by the platform (default 5000).
+  - `NODE_ENV`: `production`
+
+### Option 3: Split Cloud Deployment (Vercel + Render)
+- **Backend (Render / Railway Web Service)**:
+  - Root directory: repository root
+  - Build Command: `npm run install:backend && npm run build:cpp`
+  - Start Command: `node backend/server.js`
+- **Frontend (Vercel / Netlify)**:
+  - Root directory: `frontend/`
+  - Build Command: `npm run build`
+  - Output Directory: `dist`
+  - Environment Variable:
+    ```env
+    VITE_API_BASE_URL=https://your-backend.onrender.com/api
+    ```
 
 ---
 
