@@ -72,27 +72,52 @@ The campus grounds are modeled as an undirected, unweighted graph $G = (V, E)$ c
   - **Time Complexity**: $\mathcal{O}(V + E)$
   - **Auxiliary Space**: $\mathcal{O}(V)$ recursion call stack and visited registry.
 
-### 2. COA: Functional Units & System Bus Simulation
+### 2. COA: 16-Bit Instruction-Level CPU Emulator & Von Neumann Architecture
 
-> [!NOTE]
-> **Educational Disclaimer**: This module models a conceptual functional-unit workflow for pedagogical demonstrations. It does **not** execute binary machine opcodes (x86/ARM/RISC-V) or emulate physical silicon microarchitecture.
+The Computer Organization and Architecture (COA) module provides an interactive hardware laboratory aligned with university curricula across two core modules:
+- **Module 1**: Introduction to Computer Organization, Functional Units, and System Bus.
+- **Module 2**: CPU Design, Register File, Instruction Set Architecture (ISA), and Fetch-Decode-Execute Micro-Cycle.
 
-The simulation steps student campus requests through the 4 core functional units of a von Neumann machine:
+*(For the complete micro-project submission report, see [`docs/COA_MICRO_PROJECT_REPORT.md`](docs/COA_MICRO_PROJECT_REPORT.md))*
+
+#### A. 16-Bit CPU Architecture & Micro-Operations (Module 2)
+A deterministic software CPU engine executing a documented 20-opcode 16-bit ISA:
+- **16-Bit Register File**:
+  - General Purpose Registers: `R0` (Accumulator `ACC` alias), `R1`, `R2`, `R3`.
+  - Dedicated Control Registers: `PC` (Program Counter), `IR` (Instruction Register), `MAR` (Memory Address Register), `MDR` (Memory Data Register), `SP` (Stack Pointer, initialized to `0x00FF`).
+- **ALU Status Flags (Flag Register)**:
+  - `Z` (Zero): Set when computation output is 0.
+  - `N` (Negative): Set when MSB bit 15 is 1 (negative in two's complement).
+  - `C` (Carry / Borrow): Set on unsigned addition overflow or subtraction borrow.
+  - `V` (Overflow): Set on signed two's complement arithmetic overflow.
+- **256-Word Physical Memory (16-bit)**:
+  - Code Segment (`0x0000` - `0x007F`, 128 words)
+  - Data Segment (`0x0080` - `0x00DF`, 96 words)
+  - Hardware Stack (`0x00E0` - `0x00FF`, 32 words, LIFO)
+- **5-Stage Fetch-Decode-Execute Micro-Cycle**:
+  1. `FETCH`: `MAR <- PC, MDR <- Memory[MAR], IR <- MDR, PC <- PC + 1`
+  2. `DECODE`: Parse 6-bit opcode, register operands, addresses, and immediate literals
+  3. `EXECUTE`: ALU arithmetic/logic evaluation and branch condition verification
+  4. `MEMORY`: Direct memory read/write over system bus (`LOAD`, `STORE`, `PUSH`, `POP`)
+  5. `WRITEBACK`: Latch outcomes into destination registers and update `Z, N, C, V` flags
+- **Two-Pass Assembler & Loader**:
+  - Full syntax parsing, label resolution (`LOOP:`, `START:`), and line-number error reporting.
+  - 5 pre-configured educational programs (Arithmetic, Memory Read/Write, Loops & Branching, Campus Credit Verification, Hardware Stack).
+
+#### B. Von Neumann Tri-Bus Pipeline (Module 1)
+The simulation also steps student requests through the 4 core functional units:
 
 $$\text{Input Unit} \longrightarrow \text{Memory Unit (RAM)} \longrightarrow \text{CPU (CU + ALU)} \longrightarrow \text{Output Unit}$$
 
-1. **Input Unit**: Captures external student request parameters, translates them into internal representation, and alerts the system via an input strobe.
-2. **Memory Unit**: Decodes the base RAM address (`0x00A0`) and latches request operands into addressable RAM memory cells.
-3. **Central Processing Unit (CPU)**:
-   - **Control Unit (CU)**: Directs timing strobes, decodes operation codes, and coordinates bus transactions.
-   - **Arithmetic Logic Unit (ALU)**: Executes rule validation comparisons (e.g., verifying student credit enrollment $\le 24$).
-   - **Registers**: Tracks Program Counter (`PC`), Memory Address Register (`MAR`), Memory Data Register (`MDR`), Instruction Register (`IR`), and Accumulator (`ACC`).
-4. **Output Unit**: Reads the finalized approval resolution from writeback memory (`0x00B0`) and formats it for student terminal display.
+1. **Input Unit**: Ingests student request parameters and alerts the system via an input strobe.
+2. **Memory Unit**: Decodes the base RAM address (`0x00A0`) and latches request operands into RAM.
+3. **Central Processing Unit (CPU)**: Control Unit directs timing while the ALU validates prerequisite credits.
+4. **Output Unit**: Latches final approval packets for display on student terminals.
 
-#### The Tri-Bus Subsystem
-- **Data Bus (Bidirectional)**: Carries payload packets, credit operands, and verification outcomes between units.
-- **Address Bus (Unidirectional)**: Carries memory pointers (e.g., `0x00A0`, `0x00B0`) driven by the CPU to address decoders.
-- **Control Bus (Bidirectional Lines)**: Carries clock synchronizations, read/write strobes (`MEM_READ`, `MEM_WRITE`), and I/O interrupt acknowledgments.
+##### The Tri-Bus Subsystem
+- **Data Bus (Bidirectional)**: Carries data words and instruction payloads between units.
+- **Address Bus (Unidirectional)**: Carries memory coordinates driven by the CPU MAR.
+- **Control Bus (Bidirectional Lines)**: Carries clock timing, read/write strobes (`MEM_READ`, `MEM_WRITE`), and interrupt acknowledges.
 
 ### 3. FLAT: Deterministic Finite Automaton Workflow
 

@@ -24,6 +24,7 @@ import processingRoutes from './routes/processingRoutes.js';
 import requestRoutes from './routes/requestRoutes.js';
 import workflowRoutes from './routes/workflowRoutes.js';
 import architectureRoutes from './routes/architectureRoutes.js';
+import cpuRoutes from './routes/cpuRoutes.js';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -74,6 +75,8 @@ app.get('/api/health', (req, res) => {
 app.use('/api/navigation', navigationRoutes);
 app.use('/api/processing', processingRoutes);
 app.use('/api/requests', requestRoutes);
+app.use('/api/cpu', cpuRoutes);
+app.use('/api/processing/cpu', cpuRoutes);
 
 // Compatibility router mounts for existing frontend service calls
 app.use('/api/workflow', workflowRoutes);
