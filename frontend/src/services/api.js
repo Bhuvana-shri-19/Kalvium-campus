@@ -6,8 +6,10 @@
  * Local development fallback: http://localhost:5000/api
  */
 
-// Documented local development fallback URL
-export const DEFAULT_API_BASE_URL = 'http://localhost:5000/api';
+// Documented fallback API URL:
+// In local development (Vite dev server on :5173), fallback to backend at http://localhost:5000/api.
+// In production builds (monolithic deployment where Express serves the frontend), default to relative '/api'.
+export const DEFAULT_API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5000/api' : '/api';
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL;
 

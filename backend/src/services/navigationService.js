@@ -97,17 +97,13 @@ export const navigationService = {
     // Enrich path with detailed landmark metadata
     const pathDetails = bfsResult.path.map(id => getLandmarkById(id) || { id, name: id });
 
-    // Calculate realistic walking distance along path nodes (using coordinates or 100m baseline)
-    let totalDistanceMeters = 0;
-    for (let i = 0; i < pathDetails.length - 1; i++) {
-      const a = pathDetails[i]?.coordinates;
-      const b = pathDetails[i + 1]?.coordinates;
-      if (a && b) {
-        totalDistanceMeters += Math.round(Math.hypot(b.x - a.x, b.y - a.y));
-      } else {
-        totalDistanceMeters += 120;
-      }
-    }
+    // Calculate estimated walking distance based on nominal unweighted campus topology (~120m per hop).
+    // Note: Landmark canvas coordinates represent schematic 2D layout positions for UI rendering,
+    // not real-world physical GIS walking measurements.
+    const NOMINAL_HOP_DISTANCE_METERS = 120;
+    const totalDistanceMeters = (bfsResult.found && bfsResult.pathLength > 0)
+      ? bfsResult.pathLength * NOMINAL_HOP_DISTANCE_METERS
+      : 0;
 
     return {
       algorithm: 'Breadth-First Search (BFS)',
@@ -121,6 +117,8 @@ export const navigationService = {
       hopCount: bfsResult.pathLength,
       pathLength: bfsResult.pathLength,
       totalDistanceMeters,
+      distanceMetric: 'ESTIMATED_NOMINAL',
+      distanceDisclaimer: 'Graph is unweighted; distance is an educational estimate (~120m per topological edge hop). Coordinates represent schematic canvas layout positions rather than physical GIS measurements.',
       traversalOrder: bfsResult.traversalOrder,
       visitedNodes: bfsResult.visitedNodes,
       visitedOrder: bfsResult.traversalOrder,

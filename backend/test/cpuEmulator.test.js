@@ -458,12 +458,13 @@ describe('COA 16-Bit Instruction-Level CPU Emulator', () => {
         cpuB.stepInstruction();
       }
 
-      // Assert identical states
+      // Assert identical states (strip non-deterministic timestamp from outputLog)
       assert.deepStrictEqual(cpuA.registers, cpuB.registers);
       assert.deepStrictEqual(cpuA.flags, cpuB.flags);
       assert.strictEqual(cpuA.pc, cpuB.pc);
       assert.strictEqual(cpuA.memory[0x0080], cpuB.memory[0x0080]);
-      assert.deepStrictEqual(cpuA.outputLog, cpuB.outputLog);
+      const sanitizeOutput = log => log.map(({ timestamp, ...rest }) => rest);
+      assert.deepStrictEqual(sanitizeOutput(cpuA.outputLog), sanitizeOutput(cpuB.outputLog));
     });
   });
 
